@@ -23,7 +23,7 @@ domain contains 3 submodules; todo, user and auth.
 - user module is an internal module, not exposed to the outside world. it is used mainly for authentication and authorization by auth module.
 - todo module is responsible for todo operations. it is the main module of the project.
 
-## project structure (sequence diagram)
+## project architecture (sequence diagram)
 
 ```mermaid
 sequenceDiagram
@@ -60,31 +60,31 @@ sequenceDiagram
         AuthModule-->>-User: Login failed
     end
 
-    Note over User,Database: Create Todo Flow
-    User->>SpringSecurity: Authenticate User
-    alt Token valid
-        SpringSecurity->>+JwtService: Validate Token (JWT token)
-        JwtService->>-SpringSecurity: JWT Valid
-        SpringSecurity->>SpringSecurity: Set Auditor (User Email)
-        SpringSecurity->>+TodoModule: Proceed with request
-        TodoModule->>Database: Save todo with auditor
-        Database-->>TodoModule: Todo saved
+    Note over User,Database: Todo Services Flow
+    User->>SpringSecurity: User Action
+    SpringSecurity->>SpringSecurity: Authenticate User
+    SpringSecurity->>+JwtService: Validate Token (JWT token)
+    JwtService-->>-SpringSecurity: JWT Validation
+    SpringSecurity->>SpringSecurity: Set Auditor (User Email)
+    alt Token Valid
+        Note over User,Database: Create Todo Flow
+        SpringSecurity->>+TodoModule: Create Todo
+        TodoModule->>+Database: Create Todo with Auditor
+        Database-->>-TodoModule: Todo created
         TodoModule-->>-User: Todo created
-    else Token invalid
-        SpringSecurity->>+JwtService: Validate Token (JWT token)
-        JwtService-->>-User: Unauthorized access
-    end
 
-    Note over User,Database: List Todos Flow
-    User->>SpringSecurity: Authenticate User
-    alt Token valid
-        SpringSecurity->>+JwtService: Validate Token (JWT token)
-        JwtService-->>-SpringSecurity: JWT Valid
-        SpringSecurity->>+TodoModule: Proceed with request
-        TodoModule->>Database: Fetch todos by auditor
-        Database-->>TodoModule: List of todos
-        TodoModule-->>-User: Display todos
-    else Token invalid
+        Note over User,Database: Update/Patch Todo Flow
+        SpringSecurity->>+TodoModule: Update Todo
+        TodoModule->>+Database: Update Todo with Auditor
+        Database-->>-TodoModule: Todo updated
+        TodoModule-->>-User: Todo updated
+
+        Note over User,Database: List Todos Flow
+        SpringSecurity->>+TodoModule: List Todos
+        TodoModule->>+Database: Get Todo list for Auditor
+        Database-->>-TodoModule: List of todos
+        TodoModule-->>-User: List of todos
+    else Token Invalid
         SpringSecurity->>+JwtService: Validate Token (JWT token)
         JwtService-->>-User: Unauthorized access
     end

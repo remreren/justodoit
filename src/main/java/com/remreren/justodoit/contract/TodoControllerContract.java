@@ -77,7 +77,7 @@ public interface TodoControllerContract {
                             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
             }
     )
-    ResponseEntity<Todo> updateTodo(UpdateTodo todo, String id);
+    ResponseEntity<Todo> updateTodo(String id, UpdateTodo todo, UserDetails principal);
 
     @Operation(
             summary = "Patch a todo, for partial update",
@@ -98,5 +98,5 @@ public interface TodoControllerContract {
                             content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
             }
     )
-    ResponseEntity<Todo> patchTodo(UpdateTodo todo, String id);
+    ResponseEntity<Todo> patchTodo(String id, UpdateTodo todo, UserDetails principal);
 }

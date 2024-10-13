@@ -44,14 +44,18 @@ public class TodoController implements TodoControllerContract {
     }
 
     @PutMapping("/{id}/")
-    public ResponseEntity<Todo> updateTodo(@RequestBody @Validated UpdateTodo todo, @PathVariable String id) {
-        Todo updated = service.updateTodo(mapper.toModel(todo, id));
+    public ResponseEntity<Todo> updateTodo(@PathVariable String id,
+                                           @RequestBody @Validated UpdateTodo todo,
+                                           @AuthenticationPrincipal UserDetails principal) {
+        Todo updated = service.updateTodo(mapper.toModel(todo, id), principal.getUsername());
         return ResponseEntity.ok(updated);
     }
 
     @PatchMapping("/{id}/")
-    public ResponseEntity<Todo> patchTodo(@RequestBody @Validated UpdateTodo todo, @PathVariable String id) {
-        Todo patched = service.patchTodo(mapper.toModel(todo, id));
+    public ResponseEntity<Todo> patchTodo(@PathVariable String id,
+                                          @RequestBody @Validated UpdateTodo todo,
+                                          @AuthenticationPrincipal UserDetails principal) {
+        Todo patched = service.patchTodo(mapper.toModel(todo, id), principal.getUsername());
         return ResponseEntity.ok(patched);
     }
 }

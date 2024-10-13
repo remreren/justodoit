@@ -2,6 +2,8 @@ package com.remreren.justodoit.domain.todo;
 
 import com.remreren.justodoit.domain.todo.models.Todo;
 import com.remreren.justodoit.domain.todo.models.TodoEntity;
+import com.remreren.justodoit.exception.BaseException;
+import com.remreren.justodoit.exception.ErrorMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,10 +36,10 @@ public class TodoService {
     }
 
     @Transactional
-    public Todo updateTodo(Todo newTodo) {
-        TodoEntity ent = repository.findById(newTodo.id())
+    public Todo updateTodo(Todo newTodo, String user) {
+        TodoEntity ent = repository.findByIdAndCreatedBy(newTodo.id(), user)
                                    .map(oldTodo -> updateTodoEntity(oldTodo, newTodo))
-                                   .orElseThrow(() -> new IllegalArgumentException("Todo not found"));
+                                   .orElseThrow(() -> BaseException.of(ErrorMessages.TODO_NOT_FOUND));
 
         repository.save(ent);
 
@@ -45,10 +47,10 @@ public class TodoService {
     }
 
     @Transactional
-    public Todo patchTodo(Todo newTodo) {
-        TodoEntity ent = repository.findById(newTodo.id())
+    public Todo patchTodo(Todo newTodo, String user) {
+        TodoEntity ent = repository.findByIdAndCreatedBy(newTodo.id(), user)
                                    .map(oldTodo -> patchTodoEntity(oldTodo, newTodo))
-                                   .orElseThrow(() -> new IllegalArgumentException("Todo not found"));
+                                   .orElseThrow(() -> BaseException.of(ErrorMessages.TODO_NOT_FOUND));
 
         repository.save(ent);
 
