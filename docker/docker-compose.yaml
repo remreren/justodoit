@@ -17,7 +17,9 @@ services:
       - COUCHBASE_RAM_SIZE=512
       - COUCHBASE_INDEX_RAM_SIZE=256
     volumes:
+      - ./couchbase/init-cbserver.sh:/opt/couchbase/init-cbserver.sh
       - cb_data:/opt/couchbase/var
+    entrypoint: /opt/couchbase/init-cbserver.sh
 
   prometheus:
     image: prom/prometheus:v2.44.0
@@ -25,7 +27,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
