@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
@@ -26,7 +25,6 @@ import java.time.LocalDateTime;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class TodoEntity {
 
     @Id
@@ -63,7 +61,5 @@ public class TodoEntity {
     private String updatedBy;
 
     @Version
-    private long version;
-
-
+    private Long version;
 }

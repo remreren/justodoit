@@ -33,6 +33,7 @@ public class UserService {
         return mapper.toModel(ent);
     }
 
+    @Transactional(readOnly = true)
     public User getUser(User user) {
         return repository.findByEmail(user.email())
                          .map(mapper::toModel)
