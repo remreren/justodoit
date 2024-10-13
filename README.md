@@ -106,11 +106,12 @@ sequenceDiagram
 - then run the spring boot application
 
 ```shell
-docker compose up -d # to run the docker compose file
+cd docker
+docker compose up -d # run the docker compose file
 ```
 
 ```shell
-./mvnw spring-boot:run # to run the spring boot application
+./mvnw spring-boot:run # run the spring boot application
 ```
 
 ## for production
