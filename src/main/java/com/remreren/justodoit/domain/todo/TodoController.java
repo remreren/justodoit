@@ -1,7 +1,9 @@
 package com.remreren.justodoit.domain.todo;
 
+import com.remreren.justodoit.contract.TodoControllerContract;
 import com.remreren.justodoit.domain.todo.models.CreateTodo;
 import com.remreren.justodoit.domain.todo.models.Todo;
+import com.remreren.justodoit.domain.todo.models.TodoList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +22,15 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/todo")
-public class TodoController {
+public class TodoController implements TodoControllerContract {
 
     private final TodoService service;
     private final TodoMapper mapper;
 
     @GetMapping
-    public ResponseEntity<List<Todo>> listTodos(@AuthenticationPrincipal UserDetails principal) {
+    public ResponseEntity<TodoList> listTodos(@AuthenticationPrincipal UserDetails principal) {
         List<Todo> todoList = service.listTodos(principal.getUsername());
-        return ResponseEntity.ok(todoList);
+        return ResponseEntity.ok(new TodoList(todoList));
     }
 
     @PostMapping

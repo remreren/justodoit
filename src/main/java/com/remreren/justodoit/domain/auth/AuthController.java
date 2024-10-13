@@ -1,5 +1,6 @@
 package com.remreren.justodoit.domain.auth;
 
+import com.remreren.justodoit.contract.AuthControllerContract;
 import com.remreren.justodoit.security.JwtService;
 import com.remreren.justodoit.domain.user.UserService;
 import com.remreren.justodoit.domain.auth.models.AuthenticationModel;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthControllerContract {
 
     private final UserService service;
 
