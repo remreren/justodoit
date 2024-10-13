@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: justodoit
+  couchbase:
+    connection-string: couchbase://localhost
+    username: admin
+    password: password
+    env:
+      timeouts:
+        connect: 5000ms
+        key-value: 2500ms
+        query: 10000ms
+      io:
+        idle-http-connection-timeout: 30000ms
+        max-endpoints: 10
+  data:
+    couchbase:
+      auto-index: true
+      bucket-name: justodoit
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "prometheus" ]
+  health:
+    couchbase:
+      enabled: true
+
+logging:
+  level:
+    com.couchbase.client: INFO
+
+security:
+  jwt:
+    secret-key: X5glc6G8PqM0pGrIul2nxDZ7gI1AbIMp
+    expiration-time: 86400000
