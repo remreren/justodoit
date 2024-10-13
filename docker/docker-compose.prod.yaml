@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  couchbase:
+    image: couchbase:7.6.3
+    container_name: couchbase-server
+    ports:
+      - 8091-8096:8091-8096
+      - 11210-11211:11210-11211
+      - 18091-18096:18091-18096
+    environment:
+      - CLUSTER_NAME=justodoit-demo
+      - COUCHBASE_ADMINISTRATOR_USERNAME=admin
+      - COUCHBASE_ADMINISTRATOR_PASSWORD=password
+      - COUCHBASE_BUCKET=justodoit
+      - COUCHBASE_BUCKET_RAMSIZE=128
+      - COUCHBASE_RAM_SIZE=512
+      - COUCHBASE_INDEX_RAM_SIZE=256
+    volumes:
+      - ./couchbase/init-cbserver.sh:/opt/couchbase/init-cbserver.sh
+      - cb_data:/opt/couchbase/var
+    entrypoint: /opt/couchbase/init-cbserver.sh
+
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana-oss:9.5.2
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: unless-stopped
+
+  justodoit:
+    build:
+        context: ../
+    container_name: justodoit
+    ports:
+      - 8080:8080
+    volumes:
+      - ./justodoit/application.prod.yaml:/app/application.yaml
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - couchbase
+    restart: unless-stopped
+
+volumes:
+  cb_data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local

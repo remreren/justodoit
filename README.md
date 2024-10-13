@@ -116,4 +116,6 @@ docker compose up -d # run the docker compose file
 
 ## for production
 
-for now, there is no production setup. you can use development setup with minor changes as well.
+you can use the docker compose file in the docker folder to run the application in production mode.
+
+!!! CAUTION !!! do not forget to change values in the docker-compose file before running it in production.
