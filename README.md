@@ -119,3 +119,11 @@ docker compose up -d # run the docker compose file
 you can use the docker compose file in the docker folder to run the application in production mode.
 
 !!! CAUTION !!! do not forget to change values in the docker-compose file before running it in production.
+
+# how to run tests
+
+you can simply run tests via maven
+
+```shell
+./mvnw test
+```
