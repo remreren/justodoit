@@ -37,3 +37,6 @@ security:
   jwt:
     secret-key: X5glc6G8PqM0pGrIul2nxDZ7gI1AbIMp
     expiration-time: 86400000
+
+server:
+  forward-headers-strategy: framework
